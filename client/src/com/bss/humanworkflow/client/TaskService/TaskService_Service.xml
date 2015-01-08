@@ -1,0 +1,131 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<oracle-webservice-clients xmlns:ns2="http://java.sun.com/xml/ns/javaee">
+   <webservice-client>
+      <service-qname namespaceURI="http://xmlns.oracle.com/bpel/workflow/taskService"
+                     localpart="TaskService"/>
+      <port-info>
+         <wsdl-port namespaceURI="http://xmlns.oracle.com/bpel/workflow/taskService"
+                    localpart="TaskServicePort"/>
+         <runtime/>
+         <operations>
+            <operation name="initiateTask"/>
+            <operation name="reinitiateTask"/>
+            <operation name="overrideRoutingSlip"/>
+            <operation name="skipCurrentAssignment"/>
+            <operation name="updateTask"/>
+            <operation name="mergeAndUpdateTask"/>
+            <operation name="submitInfoForTask"/>
+            <operation name="getUsersToRequestInfoForTask"/>
+            <operation name="getFutureParticipants"/>
+            <operation name="getApprovers"/>
+            <operation name="escalateTask"/>
+            <operation name="escalateTasks"/>
+            <operation name="withdrawTask"/>
+            <operation name="withdrawTasks"/>
+            <operation name="suspendTask"/>
+            <operation name="suspendTasks"/>
+            <operation name="resumeTask"/>
+            <operation name="resumeTasks"/>
+            <operation name="acquireTask"/>
+            <operation name="acquireTasks"/>
+            <operation name="releaseTask"/>
+            <operation name="releaseTasks"/>
+            <operation name="reassignTask"/>
+            <operation name="reassignTasks"/>
+            <operation name="routeTask"/>
+            <operation name="pushBackTask"/>
+            <operation name="delegateTask"/>
+            <operation name="delegateTasks"/>
+            <operation name="errorTask"/>
+            <operation name="addComment"/>
+            <operation name="addCommentToTasks"/>
+            <operation name="addAttachment"/>
+            <operation name="removeAttachment"/>
+            <operation name="addDocument"/>
+            <operation name="removeDocument"/>
+            <operation name="renewTask"/>
+            <operation name="updateTaskOutcome"/>
+            <operation name="updateOutcomeOfTasks"/>
+            <operation name="updateTaskOutcomeAndRoute"/>
+            <operation name="requestInfoForTask"/>
+            <operation name="requestInfoForTaskWithReapproval"/>
+            <operation name="createToDoTask"/>
+            <operation name="deleteTask"/>
+            <operation name="deleteTasks"/>
+            <operation name="purgeTask"/>
+            <operation name="purgeTasks"/>
+            <operation name="setTaskSequenceChanges"/>
+            <operation name="restartRootTask"/>
+            <operation name="prepareForRestartRootTask"/>
+            <operation name="reevaluateTask"/>
+            <operation name="updatePriority"/>
+            <operation name="updatePriorityOfTasks"/>
+            <operation name="suspendTimers"/>
+            <operation name="resumeTimers"/>
+            <operation name="decomposeTask"/>
+         </operations>
+      </port-info>
+      <port-info>
+         <wsdl-port namespaceURI="http://xmlns.oracle.com/bpel/workflow/taskService"
+                    localpart="TaskServicePortSAML"/>
+         <runtime/>
+         <operations>
+            <operation name="initiateTask"/>
+            <operation name="reinitiateTask"/>
+            <operation name="overrideRoutingSlip"/>
+            <operation name="skipCurrentAssignment"/>
+            <operation name="updateTask"/>
+            <operation name="mergeAndUpdateTask"/>
+            <operation name="submitInfoForTask"/>
+            <operation name="getUsersToRequestInfoForTask"/>
+            <operation name="getFutureParticipants"/>
+            <operation name="getApprovers"/>
+            <operation name="escalateTask"/>
+            <operation name="escalateTasks"/>
+            <operation name="withdrawTask"/>
+            <operation name="withdrawTasks"/>
+            <operation name="suspendTask"/>
+            <operation name="suspendTasks"/>
+            <operation name="resumeTask"/>
+            <operation name="resumeTasks"/>
+            <operation name="acquireTask"/>
+            <operation name="acquireTasks"/>
+            <operation name="releaseTask"/>
+            <operation name="releaseTasks"/>
+            <operation name="reassignTask"/>
+            <operation name="reassignTasks"/>
+            <operation name="routeTask"/>
+            <operation name="pushBackTask"/>
+            <operation name="delegateTask"/>
+            <operation name="delegateTasks"/>
+            <operation name="errorTask"/>
+            <operation name="addComment"/>
+            <operation name="addCommentToTasks"/>
+            <operation name="addAttachment"/>
+            <operation name="removeAttachment"/>
+            <operation name="addDocument"/>
+            <operation name="removeDocument"/>
+            <operation name="renewTask"/>
+            <operation name="updateTaskOutcome"/>
+            <operation name="updateOutcomeOfTasks"/>
+            <operation name="updateTaskOutcomeAndRoute"/>
+            <operation name="requestInfoForTask"/>
+            <operation name="requestInfoForTaskWithReapproval"/>
+            <operation name="createToDoTask"/>
+            <operation name="deleteTask"/>
+            <operation name="deleteTasks"/>
+            <operation name="purgeTask"/>
+            <operation name="purgeTasks"/>
+            <operation name="setTaskSequenceChanges"/>
+            <operation name="restartRootTask"/>
+            <operation name="prepareForRestartRootTask"/>
+            <operation name="reevaluateTask"/>
+            <operation name="updatePriority"/>
+            <operation name="updatePriorityOfTasks"/>
+            <operation name="suspendTimers"/>
+            <operation name="resumeTimers"/>
+            <operation name="decomposeTask"/>
+         </operations>
+      </port-info>
+   </webservice-client>
+</oracle-webservice-clients>
