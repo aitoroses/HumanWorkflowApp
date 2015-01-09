@@ -21,14 +21,14 @@ public class TaskService extends AbstractService {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/updateTask")
-  public void getTaskDetailsById(@QueryParam("token") String token, Task task) {
+  public void updateTask(@QueryParam("token") String token, Task task) {
     getWorkflow().updateTask(token, task);
   }
   
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/updateOutcome/{taskId}/{outcome}")
-  public void getTaskDetailsById(@QueryParam("token") String token, @PathParam("outcome") String outcome, @PathParam("taskId") String taskId) {
+  public void updateOutcome(@QueryParam("token") String token, @PathParam("outcome") String outcome, @PathParam("taskId") String taskId) {
     getWorkflow().updateOutcome(token, outcome, taskId);
   }
   

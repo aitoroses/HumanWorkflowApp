@@ -3,23 +3,34 @@ package oracle.bpel.services.workflow.task.model;
 
 import com.bss.humanworkflow.client.model.Payload;
 
+import com.bss.humanworkflow.client.model.PayloadDeserializer;
+
+import com.sun.org.apache.xerces.internal.dom.DeferredDocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.Element;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import oracle.bpel.services.workflow.evidence.model.EvidenceType;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -67,8 +78,8 @@ import oracle.bpel.services.workflow.evidence.model.EvidenceType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -187,7 +198,6 @@ public class Task {
      *     This getter has been changed to do a cast
      *     
      */
-     
     public Payload getPayload() {
         return new Payload(payload);
     }
@@ -200,7 +210,8 @@ public class Task {
      *     {@link Object }
      *     
      */
-    public void setPayload(Object value) {
+    @JsonDeserialize(using = PayloadDeserializer.class)
+    public void setPayload(ElementNSImpl value) {
         this.payload = value;
     }
 

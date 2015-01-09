@@ -29,6 +29,11 @@ public class ClientTest {
     String requestId = a.getAttribute("requestId");
 
     List<Task> tasks = wf.queryTasks(wfcx.getToken());
+    
+    // Get the first taskId
+    String taskId = tasks.get(0).getSystemAttributes().getTaskId();
+    
+    task = wf.getTaskDetailsById(wfcx.getToken(), taskId);
 
     System.out.println();
   }

@@ -1,15 +1,17 @@
 package com.bss.humanworkflow.client.model;
 
+import com.sun.org.apache.xerces.internal.dom.DeferredDocumentImpl;
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 import java.util.List;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class Payload {
   
-  protected ElementNSImpl el;
+  public ElementNSImpl el;
   
   public Payload(Object el) {
     this.el = (ElementNSImpl) el;

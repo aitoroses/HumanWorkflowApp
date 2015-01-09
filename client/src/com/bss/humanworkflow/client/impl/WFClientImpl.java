@@ -6,6 +6,7 @@ import com.bss.humanworkflow.client.model.IWFClient;
 import com.bss.humanworkflow.client.TaskQueryService.TaskQueryService;
 import com.bss.humanworkflow.client.TaskQueryService.WorkflowErrorMessage;
 import com.bss.humanworkflow.client.TaskService.StaleObjectFaultMessage;
+import com.bss.humanworkflow.client.logging.JAXBLogger;
 import com.bss.humanworkflow.client.model.WFClientAbstract;
 
 import com.oracle.xmlns.bpel.workflow.taskservice.TaskServiceContextTaskBaseType;
@@ -89,7 +90,8 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     WorkflowContextType wfcx = getContext(token);
     input.setWorkflowContext(wfcx);
     try {
-      getTaskService().updateTask(input);
+      JAXBLogger.log(input);
+      //getTaskService().updateTask(input);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -109,6 +111,7 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     input.setTaskId(taskId);
     Task task;
     try {
+      JAXBLogger.log(input);
       task = getTaskService().updateTaskOutcome(input);
     } catch (Exception e) {
       e.printStackTrace();
