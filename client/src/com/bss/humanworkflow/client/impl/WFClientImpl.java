@@ -91,7 +91,7 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     input.setWorkflowContext(wfcx);
     try {
       JAXBLogger.log(input);
-      //getTaskService().updateTask(input);
+      getTaskService().updateTask(input);
     } catch (Exception e) {
       e.printStackTrace();
     }
