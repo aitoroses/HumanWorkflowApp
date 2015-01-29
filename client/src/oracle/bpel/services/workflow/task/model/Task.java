@@ -1,9 +1,9 @@
 
 package oracle.bpel.services.workflow.task.model;
 
-import com.bss.humanworkflow.client.model.Payload;
+import com.bss.humanworkflow.client.impl.payload.Payload;
 
-import com.bss.humanworkflow.client.model.PayloadDeserializer;
+import com.bss.humanworkflow.client.impl.payload.deserializer.PayloadDeserializer;
 
 import com.sun.org.apache.xerces.internal.dom.DeferredDocumentImpl;
 import com.sun.org.apache.xerces.internal.dom.DocumentImpl;

@@ -3,7 +3,7 @@ package com.bss.humanworkflow.client.test;
 import com.bss.humanworkflow.client.model.IWFClient;
 import com.bss.humanworkflow.client.impl.WFClientImpl;
 
-import com.bss.humanworkflow.client.model.Payload;
+import com.bss.humanworkflow.client.impl.payload.Payload;
 
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 

@@ -1,31 +1,23 @@
-package com.bss.humanworkflow.client.model;
-
-
-import com.sun.org.apache.xerces.internal.dom.DeferredDocumentImpl;
+package com.bss.humanworkflow.client.impl.payload.deserializer;
 
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 import java.io.StringReader;
 
-import java.sql.Timestamp;
-
-import java.text.ParsePosition;
-
-import java.util.Date;
-
-
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
 
 
+/**
+ * The target of this class is to custom deserialize the body of the payload using PayloadElement class
+ * In order to get a ElementNSImpl object we have to wrap the existing tag into <payloadElement>
+ * Then JAXB will take care of creating the deserialized ElementNSImpl
+ */
 public class PayloadDeserializer extends JsonDeserializer<ElementNSImpl> {
   public ElementNSImpl deserialize(JsonParser parser, DeserializationContext context) {
     ElementNSImpl payload = null;

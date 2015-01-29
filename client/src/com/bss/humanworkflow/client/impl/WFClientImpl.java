@@ -35,6 +35,7 @@ import oracle.bpel.services.workflow.query.model.TaskDetailsByIdRequestType;
 import oracle.bpel.services.workflow.query.model.TaskListRequestType;
 import oracle.bpel.services.workflow.query.model.TaskPredicateQueryType;
 import oracle.bpel.services.workflow.query.model.TaskPredicateType;
+import oracle.bpel.services.workflow.query.model.WorkflowContextRequestType;
 import oracle.bpel.services.workflow.task.model.Task;
 
 public class WFClientImpl extends WFClientAbstract implements IWFClient {
@@ -52,6 +53,23 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     WorkflowContextType wfctx = null;;
     try {
       wfctx = getTaskQueryService().authenticate(payload);
+    } catch (WorkflowErrorMessage e) {
+      e.printStackTrace();
+    }
+    return wfctx;
+  }
+  
+  /**
+   * Get WorkflowContext
+   * 
+   * @param token
+   */
+  public WorkflowContextType getWorkflowContext(String token) {
+    WorkflowContextRequestType payload = new WorkflowContextRequestType();
+    payload.setToken(token);
+    WorkflowContextType wfctx = null;;
+    try {
+      wfctx = getTaskQueryService().getWorkflowContext(payload);
     } catch (WorkflowErrorMessage e) {
       e.printStackTrace();
     }

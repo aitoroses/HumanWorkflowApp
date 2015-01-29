@@ -1,4 +1,4 @@
-package com.bss.humanworkflow.client.model;
+package com.bss.humanworkflow.client.impl.payload;
 
 import com.sun.org.apache.xerces.internal.dom.DeferredDocumentImpl;
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;

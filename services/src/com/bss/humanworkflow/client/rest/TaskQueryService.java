@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import javax.ws.rs.core.Response;
+
 import oracle.bpel.services.workflow.common.model.WorkflowContextType;
 import oracle.bpel.services.workflow.task.model.Task;
 
@@ -26,6 +28,17 @@ public class TaskQueryService extends AbstractService {
   public WorkflowContextType authenticate(AuthenticateInput input) {
     WorkflowContextType a = getWorkflow().authenticate(input.getLogin(), input.getPassword());
     return a;
+  }
+  
+  @GET
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/getWorkflowContext")
+  public Response getWorkflowContext(@QueryParam("token") String token) {
+    if (token == null) {
+      return Response.status(404).entity("{\"message\":\"Token not present.\"}").build();
+    }
+    WorkflowContextType a = getWorkflow().getWorkflowContext(token);
+    return Response.ok(a).build();
   }
   
   @GET
