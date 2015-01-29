@@ -91,21 +91,8 @@
       </list>
    </hash>
    <hash n="oracle.jdevimpl.config.JProjectLibraries">
-      <list n="exportedReferences">
-         <hash>
-            <url n="id" path="../../eee/Sources/EEEForms/EEEAngularApp/ViewController/FormComponent.jar.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <url n="id" path="../../eee/Sources/EEEForms/EEEAngularApp/ViewController/jersey.jar.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-      </list>
+      <list n="exportedReferences"/>
       <list n="libraryReferences">
-         <hash>
-            <url n="id" path="../../eee/Sources/EEEForms/EEEAngularApp/ViewController/FormComponent.jar.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
          <hash>
             <url n="id" path="../../eee/Sources/EEEForms/EEEAngularApp/ViewController/jersey.jar.library"/>
             <value n="isJDK" v="false"/>

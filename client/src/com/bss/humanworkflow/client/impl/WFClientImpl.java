@@ -1,7 +1,5 @@
 package com.bss.humanworkflow.client.impl;
 
-import com.bpmsoasolutions.xmlns.eapproval.forms.FormComponentType;
-
 import com.bss.humanworkflow.client.model.IWFClient;
 import com.bss.humanworkflow.client.TaskQueryService.TaskQueryService;
 import com.bss.humanworkflow.client.TaskQueryService.WorkflowErrorMessage;
