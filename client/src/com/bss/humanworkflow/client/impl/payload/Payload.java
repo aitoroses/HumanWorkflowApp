@@ -18,15 +18,34 @@ public class Payload {
   }
   
   public String getAttribute(String attr) {
+    Node node = findNode(attr);
+    if (node != null) {
+      return node.getNodeValue();
+    } else {
+      return null;
+    }
+  }
+  
+  public boolean setAttribute(String attr, String value) {
+    Node node = findNode(attr);
+    if (node != null) {
+      node.setNodeValue(value);
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  private Node findNode(String name) {
     NodeList nodes = el.getChildNodes();
     for(int i=0; i<nodes.getLength(); i++) {
       Node node = nodes.item(i);
-      if (node.getNodeName().equals(attr)) {
+      if (node.getNodeName().equals(name)) {
         // The first child it's the value
         if (node.getFirstChild() != null) {
           node = node.getFirstChild();
         }
-        return node.getNodeValue();
+        return node;
       }
     }
     return null;
