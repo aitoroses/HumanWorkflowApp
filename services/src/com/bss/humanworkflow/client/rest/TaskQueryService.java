@@ -1,5 +1,6 @@
 package com.bss.humanworkflow.client.rest;
 
+import com.bss.humanworkflow.client.TaskQueryService.WorkflowErrorMessage;
 import com.bss.humanworkflow.client.rest.types.AuthenticateInput;
 
 import com.bss.humanworkflow.client.rest.types.TokenInput;
@@ -44,8 +45,15 @@ public class TaskQueryService extends AbstractService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/queryTasks")
-  public List<Task> queryTasks(@QueryParam("token") String token) {
-    return getWorkflow().queryTasks(token);
+  public Response queryTasks(@QueryParam("token") String token) {
+    List<Task> tasks = null;
+    try {
+      tasks = getWorkflow().queryTasks(token);
+    } catch (Exception e) {
+      return WorkflowError.respond(500, e.getMessage());
+    }
+    return Response.ok().entity(tasks).build();
+
   }
   
   @GET

@@ -100,7 +100,7 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
    *
    * @param Task
    */
-  public void updateTask(String token, Task task) {
+  public void updateTask(String token, Task task) throws Exception {
     TaskServiceContextTaskBaseType input = new TaskServiceContextTaskBaseType();
     input.setTask(task);
     WorkflowContextType wfcx = getContext(token);
@@ -110,6 +110,7 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
       getTaskService().updateTask(input);
     } catch (Exception e) {
       e.printStackTrace();
+      throw e;
     }
   }
   
@@ -118,7 +119,7 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
    *
    * @param Task
    */
-  public void updateOutcome(String token, String outcome, String taskId) {
+  public void updateOutcome(String token, String outcome, String taskId) throws Exception {
     UpdateTaskOutcomeType input = new UpdateTaskOutcomeType();
     // context
     WorkflowContextType wfcx = getContext(token);
@@ -131,6 +132,7 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
       task = getTaskService().updateTaskOutcome(input);
     } catch (Exception e) {
       e.printStackTrace();
+      throw e;
     }
   }
   
@@ -166,13 +168,15 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     
   }
 
-  public List<Task> queryTasks(String token) {
+  public List<Task> queryTasks(String token) throws Exception {
+    List<Task> tasks = null;
     try {
-      return getTaskQueryService().queryTasks(createBasicTaskListRequest(token)).getTask();
-    } catch (WorkflowErrorMessage e) {
+      tasks = getTaskQueryService().queryTasks(createBasicTaskListRequest(token)).getTask();
+    } catch (Exception e) {
       e.printStackTrace();
-      return null;
+      throw e;
     }
+    return tasks;
   }
   
   private WorkflowContextType getContext(String token) {
