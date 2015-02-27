@@ -143,7 +143,8 @@
                      </hash>
                      <value n="internalName" v="libraries"/>
                      <list n="selectedLibraries">
-                        <url path="../../eApp/eAppEJBServices/Assets/libraries/jersey-archive-1.9/lib/Jersey.library"/>
+                        <string v="Jersey JAXB 2.0"/>
+                        <string v="JWTWrapper"/>
                      </list>
                      <value n="targetWithinJar" v="WEB-INF/lib"/>
                      <value n="type" v="3"/>
@@ -180,13 +181,88 @@
    <hash n="oracle.jdevimpl.config.JProjectLibraries">
       <list n="exportedReferences">
          <hash>
-            <url n="id" path="../../eApp/eAppEJBServices/Assets/libraries/jersey-archive-1.9/lib/Jersey.library"/>
+            <value n="id" v="Jersey JAXB 2.0"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="JWTWrapper"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
+      <hash n="internalDefinitions">
+         <list n="libraryDefinitions">
+            <hash>
+               <list n="classPath">
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/api/javax.ws.rs-api-2.0.1.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/aopalliance-repackaged-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/asm-debug-all-5.0.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/hk2-api-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/hk2-locator-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/hk2-utils-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/javassist-3.18.1-GA.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/javax.annotation-api-1.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/javax.inject-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/javax.servlet-api-3.0.1.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/jaxb-api-2.2.7.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/jersey-guava-2.16.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/org.osgi.core-4.2.0.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/osgi-resource-locator-1.0.1.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/persistence-api-1.0.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/ext/validation-api-1.1.0.Final.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/lib/jersey-client.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/lib/jersey-common.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/lib/jersey-container-servlet-core.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/lib/jersey-container-servlet.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/lib/jersey-media-jaxb.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/lib/jersey-server.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/jackson/jackson-core-asl-1.8.3.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/jackson/jackson-jaxrs-1.8.3.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/jackson/jackson-mapper-asl-1.8.3.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/jersey-ri-2.0/jackson/jackson-xc-1.8.3.jar" jar-entry=""/>
+               </list>
+               <value n="description" v="Jersey JAXB 2.0"/>
+               <value n="id" v="Jersey JAXB 2.0"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/JWTWrapper.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/aopalliance-repackaged-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/bcprov-jdk15on-1.51.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/commons-io-2.4.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/hk2-api-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/hk2-locator-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/hk2-utils-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jackson-annotations-2.3.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jackson-core-2.3.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jackson-databind-2.3.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jackson-jaxrs-base-2.3.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jackson-jaxrs-json-provider-2.3.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jackson-module-jaxb-annotations-2.3.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/javassist-3.18.1-GA.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/javax.annotation-api-1.2.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/javax.inject-2.4.0-b09.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/javax.ws.rs-api-2.0.1.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jcip-annotations-1.0.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jersey-common-2.16.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jersey-entity-filtering-2.16.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jersey-guava-2.16.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/jersey-media-json-jackson-2.16.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/json-smart-1.1.1.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/nimbus-jose-jwt-3.9.jar" jar-entry=""/>
+                  <url path="../../eApp/HumanWorkflowApp/Assets/libraries/JWTokens/osgi-resource-locator-1.0.1.jar" jar-entry=""/>
+               </list>
+               <value n="description" v="JWTWrapper"/>
+               <value n="id" v="JWTWrapper"/>
+            </hash>
+         </list>
+      </hash>
       <list n="libraryReferences">
          <hash>
-            <url n="id" path="../../eApp/eAppEJBServices/Assets/libraries/jersey-archive-1.9/lib/Jersey.library"/>
+            <value n="id" v="Jersey JAXB 2.0"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="JWTWrapper"/>
             <value n="isJDK" v="false"/>
          </hash>
       </list>
