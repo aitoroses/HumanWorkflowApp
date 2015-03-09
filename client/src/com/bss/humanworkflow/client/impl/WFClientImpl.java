@@ -4,6 +4,8 @@ import com.bss.humanworkflow.client.model.IWFClient;
 import com.bss.humanworkflow.client.TaskQueryService.TaskQueryService;
 import com.bss.humanworkflow.client.TaskQueryService.WorkflowErrorMessage;
 import com.bss.humanworkflow.client.TaskService.StaleObjectFaultMessage;
+import com.bss.humanworkflow.client.impl.view.Clause;
+import com.bss.humanworkflow.client.impl.view.Criteria;
 import com.bss.humanworkflow.client.logging.JAXBLogger;
 import com.bss.humanworkflow.client.model.WFClientAbstract;
 
@@ -17,9 +19,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+import com.bss.humanworkflow.client.impl.view.CriteriaInput;
 
 import oracle.bpel.services.workflow.common.model.CredentialType;
 import oracle.bpel.services.workflow.common.model.WorkflowContextType;
@@ -148,12 +148,12 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     
     // Create a predicatequery
     TaskPredicateQueryType predicateQuery = new TaskPredicateQueryType();
-    
+
     // Create the displayColumnList
     DisplayColumnType columnList = new DisplayColumnType();
     columnList.setDisplayColumn(new ArrayList<String>());
     predicateQuery.setDisplayColumnList(columnList);
-    
+
     // Predicate
     TaskPredicateType taskPredicate = new TaskPredicateType();
     taskPredicate.setClause(new ArrayList<PredicateClauseType>());
@@ -161,17 +161,20 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     taskPredicate.setAssignmentFilter(AssignmentFilterEnum.MY_GROUP);
     // Finish the predicate
     predicateQuery.setPredicate(taskPredicate);
+
     payload.setTaskPredicateQuery(predicateQuery);
-    
+
     // Return
     return payload;
     
   }
 
-  public List<Task> queryTasks(String token) throws Exception {
+  public List<Task> queryTasks(String token, CriteriaInput input) throws Exception {
     List<Task> tasks = null;
     try {
-      tasks = getTaskQueryService().queryTasks(createBasicTaskListRequest(token)).getTask();
+      TaskListRequestType criteria = Criteria.getQuery(token, input);
+      JAXBLogger.log(criteria);
+      tasks = getTaskQueryService().queryTasks(criteria).getTask();
     } catch (Exception e) {
       e.printStackTrace();
       throw e;

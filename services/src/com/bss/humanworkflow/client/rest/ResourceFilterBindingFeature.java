@@ -3,6 +3,7 @@ package com.bss.humanworkflow.client.rest;
 import com.bss.humanworkflow.client.rest.security.Authenticated;
 import com.bss.humanworkflow.client.rest.security.AuthorizationRequestFilter;
 
+import com.bss.humanworkflow.client.rest.security.AuthorizationResponseFilter;
 import com.bss.humanworkflow.client.rest.security.NotAuthenticated;
 
 import javax.ws.rs.container.DynamicFeature;
@@ -21,6 +22,7 @@ public class ResourceFilterBindingFeature implements DynamicFeature {
     
     if (!resourceInfo.getResourceMethod().isAnnotationPresent(NotAuthenticated.class)) {
       context.register(AuthorizationRequestFilter.class);
+      context.register(AuthorizationResponseFilter.class);
     }
   }
 }

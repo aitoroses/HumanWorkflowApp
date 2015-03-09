@@ -5,7 +5,7 @@ import com.bss.humanworkflow.client.impl.WFClientImpl;
 
 public abstract class AbstractService {
   
-  IWFClient wf;
+  protected IWFClient wf;
   
   public AbstractService() {
     super();

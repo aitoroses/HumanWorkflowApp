@@ -10,10 +10,6 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.http.Cookie;
 
-import javax.servlet.http.HttpServletResponse;
-
-import javax.ws.rs.core.Request;
-
 public class Utils {
   
   public static Cookie createCookie(String cookieName, String payload) {

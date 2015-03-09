@@ -5,6 +5,9 @@ import com.bss.humanworkflow.client.impl.WFClientImpl;
 
 import com.bss.humanworkflow.client.impl.payload.Payload;
 
+import com.bss.humanworkflow.client.impl.view.Criteria;
+import com.bss.humanworkflow.client.impl.view.CriteriaInput;
+
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 import java.util.List;
@@ -23,6 +26,11 @@ public class ClientTest {
       // Authenticate the user
       WorkflowContextType wfcx = wf.authenticate("buhead15", "welcome1");
       
+      // Query Creator tasks
+      List<Task> tasks = wf.queryTasks(wfcx.getToken(), Criteria.getCreatorTasksCriteria("medadvisor15"));
+      
+      tasks = wf.queryTasks(wfcx.getToken(), Criteria.getMyAssignedTasks());
+
       // Return a Task
       Task task = wf.getTaskDetailsById(wfcx.getToken(), "857d16f9-5c94-44e9-b161-1e12b2e19a46");
   

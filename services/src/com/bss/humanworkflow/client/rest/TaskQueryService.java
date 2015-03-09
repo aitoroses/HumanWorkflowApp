@@ -1,6 +1,8 @@
 package com.bss.humanworkflow.client.rest;
 
 import com.bss.humanworkflow.client.TaskQueryService.WorkflowErrorMessage;
+import com.bss.humanworkflow.client.impl.view.Criteria;
+import com.bss.humanworkflow.client.impl.view.CriteriaInput;
 import com.bss.humanworkflow.client.rest.security.NotAuthenticated;
 import com.bss.humanworkflow.client.rest.security.Utils;
 import com.bss.humanworkflow.client.rest.types.AuthenticateInput;
@@ -26,10 +28,11 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
+
 import oracle.bpel.services.workflow.common.model.WorkflowContextType;
+import oracle.bpel.services.workflow.query.model.TaskListRequestType;
 import oracle.bpel.services.workflow.task.model.Task;
 
 @Path("/TaskQueryService")
@@ -41,6 +44,10 @@ public class TaskQueryService extends AbstractService {
   @Produces(MediaType.APPLICATION_JSON)
   @NotAuthenticated
   public Response authenticate(AuthenticateInput input, @Context HttpServletResponse res) {
+    
+    if (input == null || input.getLogin() == null) {
+      return WorkflowError.respond(400, "Bad request. Not AuthenticateInput provided.");
+    }
     
     WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword());
    
@@ -58,9 +65,8 @@ public class TaskQueryService extends AbstractService {
     res.addCookie(Utils.createCookie("eappu", input.getLogin()));
     res.addCookie(Utils.createCookie("eapplg", lang));
     
-    return Response.ok().entity(wf).header("Authorization", token).build();
+    return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
   }
-  
   
   
   @GET
@@ -78,10 +84,21 @@ public class TaskQueryService extends AbstractService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/queryTasks")
-  public Response queryTasks(@QueryParam("token") String token) {
+  public Response queryTasks(@Context HttpServletRequest request, @QueryParam("initiated") Boolean initiated) {
+    if (initiated == null) {
+      initiated = false;
+    }
+    String userId = (String) request.getAttribute("user");
+    String token = (String) request.getAttribute("workflowContext");
     List<Task> tasks = null;
     try {
-      tasks = getWorkflow().queryTasks(token);
+      CriteriaInput criteria;
+      if (initiated) {
+        criteria = Criteria.getMyAssignedTasks();
+      } else {
+        criteria = Criteria.getMyInitiatedTasks(userId);
+      } 
+      tasks = getWorkflow().queryTasks(token, criteria);
     } catch (Exception e) {
       return WorkflowError.respond(500, e.getMessage());
     }
@@ -92,7 +109,8 @@ public class TaskQueryService extends AbstractService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/getTaskDetailsById/{taskId}")
-  public Task getTaskDetailsById(@PathParam("taskId") String taskId, @QueryParam("token") String token) {
+  public Task getTaskDetailsById(@PathParam("taskId") String taskId, @Context HttpServletRequest request) {
+    String token = (String) request.getAttribute("workflowContext");
     Task a = getWorkflow().getTaskDetailsById(token, taskId);
     return a;
   }

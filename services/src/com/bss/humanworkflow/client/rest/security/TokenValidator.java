@@ -9,9 +9,21 @@ import java.util.Date;
 import javax.ws.rs.container.ContainerRequestContext;
 
 public class TokenValidator {
+    
   public static boolean isValid(String token, ContainerRequestContext request) {
     
     try {
+      
+      // Split the token bearer extraction from authentication header
+      String[] tokensplit = token.split(" ");
+      if (tokensplit[0].equals("Bearer")) {
+        token = tokensplit[1];
+      } else {
+        token = tokensplit[0];
+      }
+      
+      // Put the token as a property into the request
+      request.setProperty("AuthorizationToken", token);
 
       ReadOnlyJWTClaimsSet jw = JWTokens.parseToken(token);
       
@@ -49,7 +61,7 @@ public class TokenValidator {
 
       
       // If user has access level higher than 0, it's allowed
-      return accessLevel > 0 && !expired;
+      return ((accessLevel != null) && accessLevel > 0) && !expired;
       
     } catch (Exception e) {
       e.printStackTrace();
