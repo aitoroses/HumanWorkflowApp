@@ -106,6 +106,22 @@ public class TaskQueryService extends AbstractService {
 
   }
   
+  @POST
+  @Produces(MediaType.APPLICATION_JSON)
+  @Path("/queryTasks")
+  public Response queryTasksCustom(@Context HttpServletRequest request, CriteriaInput criteria) {
+    String token = (String) request.getAttribute("workflowContext");
+    List<Task> tasks = null;
+    try {
+   
+      tasks = getWorkflow().queryTasks(token, criteria);
+    } catch (Exception e) {
+      return WorkflowError.respond(500, e.getMessage());
+    }
+    return Response.ok().entity(tasks).build();
+
+  }
+  
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/getTaskDetailsById/{taskId}")
