@@ -45,27 +45,28 @@ public class TaskQueryService extends AbstractService {
   @NotAuthenticated
   public Response authenticate(AuthenticateInput input, @Context HttpServletResponse res) {
     
-    if (input == null || input.getLogin() == null) {
-      return WorkflowError.respond(400, "Bad request. Not AuthenticateInput provided.");
-    }
-    
-    WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword());
-   
-    String lang = wf.getLocale().split("#")[0].split("_")[0];
-    
-    HashMap claims = new HashMap<String, Object>();
-    
-    claims.put("workflowContext", wf.getToken());
-    claims.put("locale", lang);
-    claims.put("AccessLevel", 1);
+    try {
+      WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword());
+      
+      String lang = wf.getLocale().split("#")[0].split("_")[0];
+      
+      HashMap claims = new HashMap<String, Object>();
+      
+      claims.put("workflowContext", wf.getToken());
+      claims.put("locale", lang);
+      claims.put("AccessLevel", 1);
 
-    String token = JWTokens.getToken(input.getLogin(), claims);
+      String token = JWTokens.getToken(input.getLogin(), claims);
+      
+      // Setup the cookies
+      //res.addCookie(Utils.createCookie("eappu", input.getLogin()));
+      //res.addCookie(Utils.createCookie("eapplg", lang));
+      
+      return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
+    } catch(Exception e) {
+      return WorkflowError.respond(400, "Bad request.");
+    }    
     
-    // Setup the cookies
-    res.addCookie(Utils.createCookie("eappu", input.getLogin()));
-    res.addCookie(Utils.createCookie("eapplg", lang));
-    
-    return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
   }
   
   
