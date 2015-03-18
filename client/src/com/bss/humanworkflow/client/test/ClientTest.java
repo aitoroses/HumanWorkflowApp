@@ -34,10 +34,10 @@ public class ClientTest {
       // Return a Task
       Task task = wf.getTaskDetailsById(wfcx.getToken(), "857d16f9-5c94-44e9-b161-1e12b2e19a46");
   
-      Payload a = task.getPayload();
+      //Payload a = task.getPayload();
       
       // Set a user comment
-      a.setAttribute("userComment", "My super comment");
+      //a.setAttribute("userComment", "My super comment");
       
       // Set the outcome
       task.getSystemAttributes().setOutcome("SAVE");

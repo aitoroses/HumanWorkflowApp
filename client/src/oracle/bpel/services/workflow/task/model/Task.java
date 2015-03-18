@@ -199,8 +199,8 @@ public class Task {
      *     This getter has been changed to do a cast
      *     
      */
-    public Payload getPayload() {
-        return new Payload(payload);
+    public ElementNSImpl getPayload() {
+        return (ElementNSImpl) payload;
     }
 
     /**
