@@ -6,6 +6,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -20,8 +21,14 @@ public class TaskService extends AbstractService {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/updateTask")
-  public Response updateTask(@Context HttpServletRequest request, Task task) {
+  public Response updateTask(@Context HttpServletRequest request, Task task, @QueryParam("token") String tokenParam) {
     String token = (String) request.getAttribute("workflowContext");
+    
+    // If there is no presence of token in the request attributes we will use the querystring token param;
+    if (token != null) {
+      token = tokenParam;
+    }
+    
     try {
       getWorkflow().updateTask(token, task);
     } catch (Exception e) {
@@ -33,8 +40,14 @@ public class TaskService extends AbstractService {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Path("/updateOutcome/{taskId}/{outcome}")
-  public Response updateOutcome(@Context HttpServletRequest request, @PathParam("outcome") String outcome, @PathParam("taskId") String taskId) {
+  public Response updateOutcome(@Context HttpServletRequest request, @PathParam("outcome") String outcome, @PathParam("taskId") String taskId, @QueryParam("token") String tokenParam) {
     String token = (String) request.getAttribute("workflowContext");
+    
+    // If there is no presence of token in the request attributes we will use the querystring token param;
+    if (token != null) {
+      token = tokenParam;
+    }
+    
     try {
       getWorkflow().updateOutcome(token, outcome, taskId);
     } catch (Exception e) {
