@@ -12,6 +12,8 @@ public class TokenValidator {
     
   public static boolean isValid(String token, ContainerRequestContext request) {
     
+    if (token == null) return true;
+    
     try {
       
       // Split the token bearer extraction from authentication header

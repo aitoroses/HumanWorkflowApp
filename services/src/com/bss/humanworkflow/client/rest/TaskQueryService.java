@@ -126,8 +126,15 @@ public class TaskQueryService extends AbstractService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Path("/getTaskDetailsById/{taskId}")
-  public Task getTaskDetailsById(@PathParam("taskId") String taskId, @Context HttpServletRequest request) {
+  public Task getTaskDetailsById(@PathParam("taskId") String taskId, @Context HttpServletRequest request, @QueryParam("token") String tokenParam) {
+    
     String token = (String) request.getAttribute("workflowContext");
+    
+    // If there is no presence of token in the request attributes we will use the querystring token param;
+    if (token != null) {
+      token = tokenParam;
+    }
+    
     Task a = getWorkflow().getTaskDetailsById(token, taskId);
     return a;
   }

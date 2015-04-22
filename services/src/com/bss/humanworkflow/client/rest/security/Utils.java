@@ -3,9 +3,6 @@ package com.bss.humanworkflow.client.rest.security;
 import java.io.ByteArrayOutputStream;
 import com.bss.security.JWTokens;
 
-import java.net.URLEncoder;
-
-import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.http.Cookie;
