@@ -1,5 +1,7 @@
 package com.bss.humanworkflow.client.TaskService;
 
+import com.bss.humanworkflow.client.config.HWFConfig;
+
 import java.io.File;
 
 import java.net.MalformedURLException;
@@ -37,12 +39,14 @@ public class TaskService_Service
       if (baseUrl == null)
       {
         wsdlLocationURL =
-            TaskService_Service.class.getResource("http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL");
+              TaskService_Service.class.getResource(HWFConfig.getTaskServiceWSDL());
+            //TaskService_Service.class.getResource("http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL");
         if (wsdlLocationURL == null)
         {
           baseUrl = new File(".").toURL();
           wsdlLocationURL =
-              new URL(baseUrl, "http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL");
+              new URL(baseUrl, HWFConfig.getTaskServiceWSDL());
+              //new URL(baseUrl, "http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL");
         }
       }
       else
@@ -51,14 +55,14 @@ public class TaskService_Service
          baseUrl = new URL(baseUrl, baseUrl.getPath() + "/");
 }
         wsdlLocationURL =
-            new URL(baseUrl, "http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL");
+            new URL(baseUrl, HWFConfig.getTaskServiceWSDL());
+            //new URL(baseUrl, "http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL");
       }
     }
     catch (MalformedURLException e)
     {
-      logger.log(Level.ALL,
-          "Failed to create wsdlLocationURL using http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL",
-          e);
+      logger.log(Level.ALL, "Failed to create wsdlLocationURL using "+HWFConfig.getTaskServiceWSDL(), e);
+      //logger.log(Level.ALL, "Failed to create wsdlLocationURL using http://soa-server:7003/integration/services/TaskService/TaskServicePort?WSDL", e);
     }
   }
 

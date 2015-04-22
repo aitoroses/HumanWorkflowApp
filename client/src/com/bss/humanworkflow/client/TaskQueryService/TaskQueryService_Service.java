@@ -1,5 +1,7 @@
 package com.bss.humanworkflow.client.TaskQueryService;
 
+import com.bss.humanworkflow.client.config.HWFConfig;
+
 import java.io.File;
 
 import java.net.MalformedURLException;
@@ -37,12 +39,14 @@ public class TaskQueryService_Service
       if (baseUrl == null)
       {
         wsdlLocationURL =
-            TaskQueryService_Service.class.getResource("http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL");
+           TaskQueryService_Service.class.getResource(HWFConfig.getTaskQueryServiceWSDL());
+            //TaskQueryService_Service.class.getResource("http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL");
         if (wsdlLocationURL == null)
         {
           baseUrl = new File(".").toURL();
           wsdlLocationURL =
-              new URL(baseUrl, "http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL");
+              new URL(baseUrl, HWFConfig.getTaskQueryServiceWSDL());
+              //new URL(baseUrl, "http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL");
         }
       }
       else
@@ -51,14 +55,14 @@ public class TaskQueryService_Service
          baseUrl = new URL(baseUrl, baseUrl.getPath() + "/");
 }
         wsdlLocationURL =
-            new URL(baseUrl, "http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL");
+            new URL(baseUrl, HWFConfig.getTaskQueryServiceWSDL());
+            //new URL(baseUrl, "http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL");
       }
     }
     catch (MalformedURLException e)
     {
-      logger.log(Level.ALL,
-          "Failed to create wsdlLocationURL using http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL",
-          e);
+      logger.log(Level.ALL, "Failed to create wsdlLocationURL using "+HWFConfig.getTaskQueryServiceWSDL(),e);
+      //logger.log(Level.ALL, "Failed to create wsdlLocationURL using http://soa-server:7003/integration/services/TaskQueryService/TaskQueryService?WSDL",e);
     }
   }
 
