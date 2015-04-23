@@ -1,5 +1,9 @@
 package com.bss.humanworkflow.client.impl.payload.deserializer;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 
 import java.io.StringReader;
@@ -7,10 +11,6 @@ import java.io.StringReader;
 import javax.xml.bind.JAXBContext;
 
 import javax.xml.bind.Unmarshaller;
-
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
 
 
 /**

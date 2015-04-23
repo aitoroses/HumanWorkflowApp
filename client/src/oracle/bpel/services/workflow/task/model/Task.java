@@ -5,6 +5,8 @@ import com.bss.humanworkflow.client.impl.payload.Payload;
 
 import com.bss.humanworkflow.client.impl.payload.deserializer.PayloadDeserializer;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import com.sun.org.apache.xerces.internal.dom.DeferredDocumentImpl;
 import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
@@ -23,8 +25,6 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
 import oracle.bpel.services.workflow.evidence.model.EvidenceType;
-
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 
 /**
