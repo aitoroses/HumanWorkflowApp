@@ -83,7 +83,7 @@ public  class HWFConfig {
               String externalPropertiesFilePath  = propertiesPath.getProperty(CONFIG_FILE_PATH);
             //System.out.println("loadConfProperties() >> CONFIG_FILE_PATH="+CONFIG_FILE_PATH);
           
-              boolean testMode  = Boolean.getBoolean(propertiesPath.getProperty(TEST_MODE));
+              boolean testMode  = propertiesPath.getProperty(TEST_MODE).equals("true");
             //System.out.println("loadConfProperties() >> TEST_MODE="+TEST_MODE);
               
               if (testMode) {
