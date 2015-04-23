@@ -131,7 +131,7 @@ public class TaskQueryService extends AbstractService {
     String token = (String) request.getAttribute("workflowContext");
     
     // If there is no presence of token in the request attributes we will use the querystring token param;
-    if (token != null) {
+    if (token == null) {
       token = tokenParam;
     }
     

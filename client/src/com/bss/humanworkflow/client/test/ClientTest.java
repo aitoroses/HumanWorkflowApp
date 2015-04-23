@@ -24,10 +24,10 @@ public class ClientTest {
       IWFClient wf = new WFClientImpl();
   
       // Authenticate the user
-      WorkflowContextType wfcx = wf.authenticate("buhead15", "welcome1");
+      WorkflowContextType wfcx = wf.authenticate("at_req_all", "welcome1");
       
       // Query Creator tasks
-      List<Task> tasks = wf.queryTasks(wfcx.getToken(), Criteria.getCreatorTasksCriteria("medadvisor15"));
+      List<Task> tasks = wf.queryTasks(wfcx.getToken(), Criteria.getCreatorTasksCriteria("at_req_all"));
       
       tasks = wf.queryTasks(wfcx.getToken(), Criteria.getMyAssignedTasks());
 

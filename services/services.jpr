@@ -143,7 +143,7 @@
                      </hash>
                      <value n="internalName" v="libraries"/>
                      <list n="selectedLibraries">
-                        <url path="../../eee/Sources/EEEForms/EEEAngularApp/ViewController/JerseyJWT.library"/>
+                        <string v="JerseyJWT"/>
                      </list>
                      <value n="targetWithinJar" v="WEB-INF/lib"/>
                      <value n="type" v="3"/>
