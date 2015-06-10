@@ -11,6 +11,10 @@ import com.bss.humanworkflow.client.rest.types.TokenInput;
 
 import com.bss.security.JWTokens;
 
+import com.novartis.bpm.um.UMMClientProxy;
+
+import com.novartis.bpm.um.client.InvokeContext;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,7 +60,12 @@ public class TaskQueryService extends AbstractService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   @NotAuthenticated
-  public Response authenticate(AuthenticateInput input, @Context HttpServletResponse res, @Context HttpServletRequest req, @Context ServletContext context) {
+  public Response authenticate(
+    AuthenticateInput input, 
+    @Context HttpServletResponse res, 
+    @Context HttpServletRequest req, 
+    @Context ServletContext context,
+    @QueryParam("ummContext") String ummContext ) {
     
     try {
       WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword());
@@ -70,12 +79,18 @@ public class TaskQueryService extends AbstractService {
       claims.put("AccessLevel", 1);
 
       String token = JWTokens.getToken(input.getLogin(), claims);
-        
+      
+      // ADF Authentication
       adfAuthenticate(input.getLogin(), input.getPassword(), req);
       
+      // UMM ensure user existance (optional, only if appId specified)
+      if (!ummContext.equals("") || ummContext != null) {
+        ensureUMMUser(input.getLogin(), ummContext);
+      }
+      
       // Setup the cookies
-      //res.addCookie(Utils.createCookie("eappu", input.getLogin()));
-      //res.addCookie(Utils.createCookie("eapplg", lang));
+      res.addCookie(Utils.createCookie("eappu", input.getLogin()));
+      res.addCookie(Utils.createCookie("eapplg", lang));
       
       return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
     } catch(Exception e) {
@@ -156,21 +171,33 @@ public class TaskQueryService extends AbstractService {
     return a;
   }
   
-    private void adfAuthenticate(String _username, String _password , HttpServletRequest req){
-        
-        try {
-          Subject subject = null;
-
-          byte[] pw = _password.getBytes();
-          subject = Authentication.login(new URLCallbackHandler(_username, pw));
-          weblogic.servlet.security.ServletAuthentication.runAs(subject, req);
-          
-            
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-        
-    }
+  private void adfAuthenticate(String _username, String _password , HttpServletRequest req){
+      
+      try {
+        Subject subject = null;
   
+        byte[] pw = _password.getBytes();
+        subject = Authentication.login(new URLCallbackHandler(_username, pw));
+        weblogic.servlet.security.ServletAuthentication.runAs(subject, req);
+        
+          
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      
+  }
+  
+  private boolean ensureUMMUser(String userId, String ummContextAppId) {
+    InvokeContext ctx = new InvokeContext();
+    ctx.setRequester(userId);
+    ctx.setApplicationId(ummContextAppId);
+    UMMClientProxy prox = new UMMClientProxy();
+    try {
+      return prox.ummCheckUser(ctx, userId);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
   
 }

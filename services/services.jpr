@@ -217,6 +217,10 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
+            <value n="id" v="UMMIntegration.jar"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
             <value n="id" v="Weblogic.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -265,7 +269,16 @@
             </hash>
             <hash>
                <list n="classPath">
-                  <url path="../../../Oracle/Middleware/wlserver_10.3/server/lib/weblogic.jar" jar-entry=""/>
+                  <url path="../lib/UMMIntegration.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="UMMIntegration.jar"/>
+               <value n="id" v="UMMIntegration.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../../../../../Oracle/Middleware/wlserver_10.3/server/lib/weblogic.jar" jar-entry=""/>
                </list>
                <value n="deployedByDefault" v="true"/>
                <value n="description" v="Weblogic.jar"/>
@@ -297,6 +310,10 @@
          </hash>
          <hash>
             <value n="id" v="Servlet Runtime"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <value n="id" v="UMMIntegration.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
