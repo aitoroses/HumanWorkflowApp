@@ -1,6 +1,12 @@
 package com.bss.humanworkflow.client.rest;
 
+import javax.security.auth.Subject;
+import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginException;
+
 import javax.servlet.http.HttpServletRequest;
+
+import javax.servlet.http.HttpServletResponse;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
