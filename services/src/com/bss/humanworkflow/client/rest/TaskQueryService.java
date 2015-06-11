@@ -84,7 +84,7 @@ public class TaskQueryService extends AbstractService {
       adfAuthenticate(input.getLogin(), input.getPassword(), req);
       
       // UMM ensure user existance (optional, only if appId specified)
-      if (!ummContext.equals("") || ummContext != null) {
+      if (ummContext != null && !ummContext.equals("")) {
         ensureUMMUser(input.getLogin(), ummContext);
       }
       
