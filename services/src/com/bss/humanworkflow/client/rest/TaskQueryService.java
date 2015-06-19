@@ -187,10 +187,10 @@ public class TaskQueryService extends AbstractService {
       
   }
   
-  private boolean ensureUMMUser(String userId, String ummContextAppId) {
+  private boolean ensureUMMUser(String userId, String applicationId) {
     InvokeContext ctx = new InvokeContext();
     ctx.setRequester(userId);
-    ctx.setApplicationId(ummContextAppId);
+    ctx.setApplicationId(applicationId);
     UMMClientProxy prox = new UMMClientProxy();
     try {
       return prox.ummCheckUser(ctx, userId);
