@@ -12,6 +12,7 @@ import oracle.bpel.services.workflow.task.model.Task;
 public interface IWFClient {
   
   public WorkflowContextType authenticate(String login, String password);
+  public WorkflowContextType authenticate(String login, String password, String onBehalf);
   public WorkflowContextType getWorkflowContext(String token);
   public List<Task> queryTasks(String token, CriteriaInput input) throws Exception;
   public Task getTaskDetailsById(String token, String taskId);

@@ -1,10 +1,7 @@
 package com.bss.humanworkflow.client.impl;
 
 import com.bss.humanworkflow.client.model.IWFClient;
-import com.bss.humanworkflow.client.TaskQueryService.TaskQueryService;
 import com.bss.humanworkflow.client.TaskQueryService.WorkflowErrorMessage;
-import com.bss.humanworkflow.client.TaskService.StaleObjectFaultMessage;
-import com.bss.humanworkflow.client.impl.view.Clause;
 import com.bss.humanworkflow.client.impl.view.Criteria;
 import com.bss.humanworkflow.client.logging.JAXBLogger;
 import com.bss.humanworkflow.client.model.WFClientAbstract;
@@ -12,9 +9,6 @@ import com.bss.humanworkflow.client.model.WFClientAbstract;
 import com.oracle.xmlns.bpel.workflow.taskservice.TaskServiceContextTaskBaseType;
 
 import com.oracle.xmlns.bpel.workflow.taskservice.UpdateTaskOutcomeType;
-
-import java.io.StringWriter;
-import java.io.Writer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +18,8 @@ import com.bss.humanworkflow.client.impl.view.CriteriaInput;
 import oracle.bpel.services.workflow.common.model.CredentialType;
 import oracle.bpel.services.workflow.common.model.WorkflowContextType;
 import oracle.bpel.services.workflow.query.model.AssignmentFilterEnum;
-import oracle.bpel.services.workflow.query.model.ClauseType;
 import oracle.bpel.services.workflow.query.model.DisplayColumnType;
-import oracle.bpel.services.workflow.query.model.ObjectFactory;
 import oracle.bpel.services.workflow.query.model.PredicateClauseType;
-import oracle.bpel.services.workflow.query.model.PredicateType;
 import oracle.bpel.services.workflow.query.model.TaskDetailsByIdRequestType;
 import oracle.bpel.services.workflow.query.model.TaskListRequestType;
 import oracle.bpel.services.workflow.query.model.TaskPredicateQueryType;
@@ -48,7 +39,27 @@ public class WFClientImpl extends WFClientAbstract implements IWFClient {
     CredentialType payload = new CredentialType();
     payload.setLogin(login);
     payload.setPassword(password);
-    WorkflowContextType wfctx = null;;
+    WorkflowContextType wfctx = null;
+    try {
+      wfctx = getTaskQueryService().authenticate(payload);
+    } catch (WorkflowErrorMessage e) {
+      e.printStackTrace();
+    }
+    return wfctx;
+  }
+
+  /**
+   * Authentication on behalf method
+   *
+   * @param login
+   * @param password
+   */
+  public WorkflowContextType authenticate(String login, String password, String onBehalf) {
+    CredentialType payload = new CredentialType();
+    payload.setLogin(login);
+    payload.setPassword(password);
+    payload.setOnBehalfOfUser(onBehalf);
+    WorkflowContextType wfctx = null;
     try {
       wfctx = getTaskQueryService().authenticate(payload);
     } catch (WorkflowErrorMessage e) {
