@@ -110,7 +110,7 @@ public class TaskQueryService extends AbstractService {
           @Context HttpServletResponse res,
           @Context HttpServletRequest req,
           @Context ServletContext context,
-          @QueryParam("onBehalf") String onBehalf
+          @QueryParam("onBehalf") String onBehalf,
           @QueryParam("ummContext") String ummContext ) {
 
     try {
@@ -128,7 +128,7 @@ public class TaskQueryService extends AbstractService {
       claims.put("workflowContext", wf.getToken());
       claims.put("locale", lang);
       claims.put("AccessLevel", 1);
-      claims.put("onBehalf", onBehalf)
+      claims.put("onBehalf", onBehalf);
 
       String token = JWTokens.getToken(input.getLogin(), claims);
 
