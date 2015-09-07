@@ -88,6 +88,57 @@ public class TaskQueryService extends AbstractService {
     }    
     
   }
+
+  @POST
+  @Path("/authenticateOnBehalf")
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  @NotAuthenticated
+  public Response authenticateOnBehalf(
+          AuthenticateInput input,
+          @Context HttpServletResponse res,
+          @Context HttpServletRequest req,
+          @Context ServletContext context,
+          @QueryParam("onBehalf") String onBehalf,
+          @QueryParam("ummContext") String ummContext ) {
+
+    try {
+
+      if (onBehalf == null || onBehalf.equals("")) {
+        return authenticate(input, res, req, context, ummContext);
+      }
+
+      WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword(), onBehalf);
+
+      String lang = wf.getLocale().split("#")[0].split("_")[0];
+
+      HashMap claims = new HashMap<String, Object>();
+
+      claims.put("workflowContext", wf.getToken());
+      claims.put("locale", lang);
+      claims.put("AccessLevel", 1);
+      claims.put("onBehalf", onBehalf);
+
+      String token = JWTokens.getToken(input.getLogin(), claims);
+
+      // ADF Authentication
+      adfAuthenticate(input.getLogin(), input.getPassword(), req);
+
+      // UMM ensure user existance (optional, only if appId specified)
+      if (ummContext != null && !ummContext.equals("")) {
+        ensureUMMUser(input.getLogin(), ummContext);
+      }
+
+      // Setup the cookies
+      res.addCookie(Utils.createCookie("eappu", input.getLogin()));
+      res.addCookie(Utils.createCookie("eapplg", lang));
+
+      return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
+    } catch(Exception e) {
+      e.printStackTrace();
+      return WorkflowError.respond(400, "Bad request.");
+    }
+  }
   
   
   @GET
