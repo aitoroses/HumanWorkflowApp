@@ -233,7 +233,7 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <value n="id" v="UMMIntegration.jar"/>
+            <value n="id" v="UMMIntegrationLib.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
@@ -294,20 +294,20 @@
             </hash>
             <hash>
                <list n="classPath">
-                  <url path="../lib/UMM/UMMIntegration.jar" jar-entry=""/>
-               </list>
-               <value n="deployedByDefault" v="true"/>
-               <value n="description" v="UMMIntegration.jar"/>
-               <value n="id" v="UMMIntegration.jar"/>
-               <value n="locked" v="true"/>
-            </hash>
-            <hash>
-               <list n="classPath">
                   <url path="../lib/UMM/UMMIntegrationDeps.jar" jar-entry=""/>
                </list>
                <value n="deployedByDefault" v="true"/>
                <value n="description" v="UMMIntegrationDeps.jar"/>
                <value n="id" v="UMMIntegrationDeps.jar"/>
+               <value n="locked" v="true"/>
+            </hash>
+            <hash>
+               <list n="classPath">
+                  <url path="../lib/UMM/UMMIntegrationLib.jar" jar-entry=""/>
+               </list>
+               <value n="deployedByDefault" v="true"/>
+               <value n="description" v="UMMIntegrationLib.jar"/>
+               <value n="id" v="UMMIntegrationLib.jar"/>
                <value n="locked" v="true"/>
             </hash>
          </list>
@@ -342,7 +342,7 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <value n="id" v="UMMIntegration.jar"/>
+            <value n="id" v="UMMIntegrationLib.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
