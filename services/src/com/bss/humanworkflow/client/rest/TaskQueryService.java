@@ -59,7 +59,14 @@ public class TaskQueryService extends AbstractService {
     try {
       WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword());
       
-      String lang = wf.getLocale().split("#")[0].split("_")[0];
+      String lang;
+      try {
+        // Accept-Language:en,es;q=0.8,gl;q=0.6,de;q=0.4
+        lang = req.getHeader("Accept-Language").split(";")[0].split(",")[0];
+      } catch(Exception e) {
+        System.out.println("Error getting locale on authentication: Fallback to user profile's one");
+        lang = wf.getLocale().split("#")[0].split("_")[0];
+      }
       
       HashMap claims = new HashMap<String, Object>();
       
@@ -302,5 +309,4 @@ public class TaskQueryService extends AbstractService {
       return false;
     }
   }
-  
 }
