@@ -24,7 +24,10 @@ public class AuthorizationResponseFilter implements ContainerResponseFilter {
     }
     
     MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-    headers.add("Authorization", JWTokens.refreshToken(token));
+    
+    String newToken = JWTokens.refreshToken(token);
+    
+    headers.add("Authorization", "Bearer " + newToken);
   }
 }
 

@@ -57,12 +57,25 @@ public class TaskQueryService extends AbstractService {
     @QueryParam("ummContext") String ummContext ) {
     
     try {
-      WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword());
+        
+      String userId = "";  
+      if(input.getLogin() != null  && !input.getLogin().equals(""))
+        userId = input.getLogin().toLowerCase();
+
+      WorkflowContextType wf = getWorkflow().authenticate(userId, input.getPassword());
       
       String lang;
       try {
-        // Accept-Language:en,es;q=0.8,gl;q=0.6,de;q=0.4
-        lang = req.getHeader("Accept-Language").split(";")[0].split(",")[0];
+        // Accept-Language:en,es;q=0.8,gl;q=0.6,de;q=0.4 or en-US,en;q=0.8,es;q=0.6
+        
+        lang = req.getHeader("Accept-Language");
+          
+          if(lang != null && !lang.equals("")){
+              lang = lang.substring(0,2);
+              //lang = req.getHeader("Accept-Language").split(";")[0].split(",")[0].substring(2);
+          }else
+              lang = wf.getLocale().split("#")[0].split("_")[0];
+        
       } catch(Exception e) {
         System.out.println("Error getting locale on authentication: Fallback to user profile's one");
         lang = wf.getLocale().split("#")[0].split("_")[0];
@@ -74,18 +87,18 @@ public class TaskQueryService extends AbstractService {
       claims.put("locale", lang);
       claims.put("AccessLevel", 1);
 
-      String token = JWTokens.getToken(input.getLogin(), claims);
+      String token = JWTokens.getToken(userId, claims);
       
       // ADF Authentication
-      adfAuthenticate(input.getLogin(), input.getPassword(), req);
+      adfAuthenticate(userId, input.getPassword(), req);
       
       // UMM ensure user existance (optional, only if appId specified)
       if (ummContext != null && !ummContext.equals("")) {
-        ensureUMMUser(input.getLogin(), ummContext);
+        ensureUMMUser(userId, ummContext);
       }
       
       // Setup the cookies
-      res.addCookie(Utils.createCookie("eappu", input.getLogin()));
+      res.addCookie(Utils.createCookie("eappu", userId));
       res.addCookie(Utils.createCookie("eapplg", lang));
       
       return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
@@ -114,8 +127,12 @@ public class TaskQueryService extends AbstractService {
       if (onBehalf == null || onBehalf.equals("")) {
         return authenticate(input, res, req, context, ummContext);
       }
+        
+      String userId = "";  
+      if(input.getLogin() != null  && !input.getLogin().equals(""))
+          userId = input.getLogin().toLowerCase();
 
-      WorkflowContextType wf = getWorkflow().authenticate(input.getLogin(), input.getPassword(), onBehalf);
+      WorkflowContextType wf = getWorkflow().authenticate(userId, input.getPassword(), onBehalf);
 
       String lang = wf.getLocale().split("#")[0].split("_")[0];
 
@@ -126,18 +143,18 @@ public class TaskQueryService extends AbstractService {
       claims.put("AccessLevel", 1);
       claims.put("onBehalf", onBehalf);
 
-      String token = JWTokens.getToken(input.getLogin(), claims);
+      String token = JWTokens.getToken(userId, claims);
 
       // ADF Authentication
-      adfAuthenticate(input.getLogin(), input.getPassword(), req);
+      adfAuthenticate(userId, input.getPassword(), req);
 
       // UMM ensure user existance (optional, only if appId specified)
       if (ummContext != null && !ummContext.equals("")) {
-        ensureUMMUser(input.getLogin(), ummContext);
+        ensureUMMUser(userId, ummContext);
       }
 
       // Setup the cookies
-      res.addCookie(Utils.createCookie("eappu", input.getLogin()));
+      res.addCookie(Utils.createCookie("eappu", userId));
       res.addCookie(Utils.createCookie("eapplg", lang));
 
       return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
