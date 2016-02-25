@@ -47,6 +47,10 @@ public class ProcessType {
     protected String processName;
     protected ProcessTypeEnum processType;
     protected String processVersion;
+    
+    public ProcessType () {
+        
+    }
 
     /**
      * Gets the value of the domainId property.

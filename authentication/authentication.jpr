@@ -113,6 +113,7 @@
             <hash n="archiveOptions">
                <value n="hasManifest" v="false"/>
             </hash>
+            <value n="contextRoot" v="HumanWorkflow/TaskQueryService"/>
             <url n="earURL" path="deploy/authentication.ear"/>
             <value n="enterpriseAppName" v="authentication"/>
             <hash n="fileGroups">
@@ -211,14 +212,6 @@
             <value n="isJDK" v="false"/>
          </hash>
          <hash>
-            <value n="id" v="UMMIntegrationDeps.jar"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="UMMIntegrationLib.jar"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
             <value n="id" v="WebLogic 10.3 Remote-Client"/>
             <value n="isJDK" v="false"/>
          </hash>
@@ -272,27 +265,10 @@
             </hash>
             <hash>
                <list n="classPath">
-                  <url path="../lib/UMM/UMMIntegrationDeps.jar" jar-entry=""/>
-               </list>
-               <value n="deployedByDefault" v="true"/>
-               <value n="description" v="UMMIntegrationDeps.jar"/>
-               <value n="id" v="UMMIntegrationDeps.jar"/>
-               <value n="locked" v="true"/>
-            </hash>
-            <hash>
-               <list n="classPath">
-                  <url path="../lib/UMM/UMMIntegrationLib.jar" jar-entry=""/>
-               </list>
-               <value n="deployedByDefault" v="true"/>
-               <value n="description" v="UMMIntegrationLib.jar"/>
-               <value n="id" v="UMMIntegrationLib.jar"/>
-               <value n="locked" v="true"/>
-            </hash>
-            <hash>
-               <list n="classPath">
                   <url path="../lib/BPM/bpm-services.jar" jar-entry=""/>
                   <url path="../lib/BPM/oracle.bpm.bpm-services.implementation.jar" jar-entry=""/>
                   <url path="../lib/BPM/oracle.bpm.bpm-services.interface.jar" jar-entry=""/>
+                  <url path="../lib/BPM/oracle.bpm.bpm-services.client.jar" jar-entry=""/>
                </list>
                <value n="description" v="BPM Services"/>
                <value n="id" v="BPM Services"/>
@@ -306,14 +282,6 @@
          </hash>
          <hash>
             <value n="id" v="Jersey"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="UMMIntegrationDeps.jar"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-         <hash>
-            <value n="id" v="UMMIntegrationLib.jar"/>
             <value n="isJDK" v="false"/>
          </hash>
          <hash>

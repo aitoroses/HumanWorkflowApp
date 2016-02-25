@@ -1,4 +1,4 @@
-package com.bss.humanworkflow.client.rest.security;
+package com.bss.humanworkflow.client.rest;
 
 import java.io.ByteArrayOutputStream;
 import com.bss.security.JWTokens;

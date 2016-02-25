@@ -55,7 +55,7 @@ import weblogic.security.services.Authentication;
 public class TaskQueryService extends AbstractService {
     
     @POST
-    @Path("/authenticate")
+    @Path("/auth")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotAuthenticated
@@ -139,7 +139,7 @@ public class TaskQueryService extends AbstractService {
     }
 
     @POST
-    @Path("/authenticateOnBehalf")
+    @Path("/authOnBehalf")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotAuthenticated
