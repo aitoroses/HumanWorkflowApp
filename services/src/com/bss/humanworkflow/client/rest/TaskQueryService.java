@@ -98,11 +98,13 @@ public class TaskQueryService extends AbstractService {
           
             claims.put("workflowContext", wf.getToken());
             claims.put("locale", lang);
-            
+            claims.put("AccessLevel", 1);
+
+            /*
             if (ummContext != null && !ummContext.equals("")) {
                 claims.put("BusinessRole", getUserProlile(userId, ummContext));
             }
-    
+            */
             String token = JWTokens.getToken(userId, claims);
           
             // ADF Authentication

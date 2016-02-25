@@ -107,6 +107,7 @@ public class TaskQueryService  {
           
             claims.put("workflowContext", ibpmCntx.getToken());
             claims.put("locale", lang);
+            claims.put("AccessLevel", 1);
             /*
             if (ummContext != null && !ummContext.equals("")) {
                 claims.put("BusinessRole", getUserProlile(userId, ummContext));
