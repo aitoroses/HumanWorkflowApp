@@ -113,7 +113,7 @@
             <hash n="archiveOptions">
                <value n="hasManifest" v="false"/>
             </hash>
-            <value n="contextRoot" v="HumanWorkflow/TaskQueryService"/>
+            <value n="contextRoot" v="HumanWorkflow/identity"/>
             <url n="earURL" path="deploy/authentication.ear"/>
             <value n="enterpriseAppName" v="authentication"/>
             <hash n="fileGroups">

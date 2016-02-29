@@ -17,6 +17,7 @@ public class AuthorizationResponseFilter implements ContainerResponseFilter {
     
     // Refresh the expire date of the authorizationToken
     String token = (String) requestContext.getProperty("AuthorizationToken");
+      
     
     if (token == null) {
       System.out.println("AuthorizationResponseFilter: AuthorizationToken it's null.");

@@ -7,8 +7,8 @@ import com.bss.humanworkflow.client.rest.security.NotAuthenticated;
 import com.bss.humanworkflow.client.rest.security.Utils;
 import com.bss.humanworkflow.client.rest.types.AuthenticateInput;
 
-import com.bss.humanworkflow.client.userprofile.PropertyHW;
-import com.bss.humanworkflow.client.userprofile.UserProfileHW;
+import com.bss.humanworkflow.client.userprofile.UserProperty;
+import com.bss.humanworkflow.client.userprofile.ApplicationUserProfile;
 import com.bss.security.JWTokens;
 
 import com.novartis.bpm.um.UMMClientProxy;
@@ -55,7 +55,7 @@ import weblogic.security.services.Authentication;
 public class TaskQueryService extends AbstractService {
     
     @POST
-    @Path("/auth")
+    @Path("/authenticate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotAuthenticated
@@ -87,11 +87,11 @@ public class TaskQueryService extends AbstractService {
                     lang = lang.substring(0,2);
                     //lang = req.getHeader("Accept-Language").split(";")[0].split(",")[0].substring(2);
                 }//else
-                  //  lang = wf.getLocale().split("#")[0].split("_")[0];
+                  lang = wf.getLocale().split("#")[0].split("_")[0];
             
             } catch(Exception e) {
                 System.out.println("Error getting locale on authentication: Fallback to user profile's one");
-                //lang = wf.getLocale().split("#")[0].split("_")[0];
+                lang = wf.getLocale().split("#")[0].split("_")[0];
             }
                         
             HashMap claims = new HashMap<String, Object>();
@@ -99,6 +99,7 @@ public class TaskQueryService extends AbstractService {
             claims.put("workflowContext", wf.getToken());
             claims.put("locale", lang);
             claims.put("AccessLevel", 1);
+            
 
             /*
             if (ummContext != null && !ummContext.equals("")) {
@@ -106,6 +107,7 @@ public class TaskQueryService extends AbstractService {
             }
             */
             String token = JWTokens.getToken(userId, claims);
+            
           
             // ADF Authentication
             adfAuthenticate(userId, input.getPassword(), req);
@@ -139,7 +141,7 @@ public class TaskQueryService extends AbstractService {
     }
 
     @POST
-    @Path("/authOnBehalf")
+    @Path("/authenticateOnBehalf")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @NotAuthenticated
@@ -165,11 +167,9 @@ public class TaskQueryService extends AbstractService {
             claims.put("workflowContext", wf.getToken());
             claims.put("locale", lang);
             claims.put("onBehalf", onBehalf);
+            claims.put("AccessLevel", 1);
             
-            if (ummContext != null && !ummContext.equals("")) {
-                claims.put("BusinessRole", getUserProlile(userId, ummContext));
-            }
-            
+
             String token = JWTokens.getToken(userId, claims);
             
             // ADF Authentication
@@ -184,6 +184,7 @@ public class TaskQueryService extends AbstractService {
             res.addCookie(Utils.createCookie("eappu", userId));
             res.addCookie(Utils.createCookie("eapplg", lang));
             
+        
             return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
         } catch(Exception e) {
             e.printStackTrace();
@@ -351,90 +352,12 @@ public class TaskQueryService extends AbstractService {
     
             byte[] pw = _password.getBytes();
             subject = Authentication.login(new URLCallbackHandler(_username, pw));
+            
             weblogic.servlet.security.ServletAuthentication.runAs(subject, req);                  
         } catch (Exception e) {
             //e.printStackTrace();
             throw e;
         }      
-    }
-  
-    private boolean ensureUMMUser(String userId, String applicationId) throws Exception {
-        InvokeContext ctx = new InvokeContext(userId, applicationId);
-        
-        UMMClientProxy prox = new UMMClientProxy();
-        try {
-            return prox.ummCheckUser(ctx, userId);
-        } catch (Exception e) {
-            //e.printStackTrace();
-            throw e;
-        }
-    }
-  
-    private UserProfileHW getUserProlile(String userId, String applicationId) throws Exception {
-        
-        InvokeContext ctx = new InvokeContext(userId, applicationId);
-
-        UMMClientProxy prox = new UMMClientProxy();
-        
-        UserProfileHW userProfileHW = null;
-        
-        try {
-            
-            UserProfile userP = prox.getUserProfile(ctx, userId);
-            
-            userProfileHW = new UserProfileHW();
-            
-            if(userP != null ){
-                //data user
-                if(userP.getUserData()!= null){ 
-                    userProfileHW.setUserId(userP.getUserData().getUid());
-                    userProfileHW.setDisplayName(userP.getUserData().getDisplayName());
-                    userProfileHW.setFirstName(userP.getUserData().getFirstName());
-                    userProfileHW.setLastName(userP.getUserData().getLastName());
-                    userProfileHW.setMail(userP.getUserData().getMail());
-                }
-                //ous
-                userProfileHW.setOus(userP.getOus());
-                
-                //properties
-                if(userP.getProperties() != null){
-                    
-                    List<PropertyHW> listPropHW = new ArrayList<PropertyHW>();
-                    PropertyHW propHW = null;
-                    
-                    
-                    for(Property prop : userP.getProperties()){                        
-                        propHW = new PropertyHW();
-                        propHW.setLabel(prop.getLabel());
-                        propHW.setValue(prop.getValue());
-                        
-                        listPropHW.add(propHW);
-                    }                    
-                    userProfileHW.setProperties(listPropHW);                    
-                }
-                
-                //business roles
-                List<Map<String, String>> businessRole = prox.getBusinessRolesForUser(ctx, userId);
-                
-                List<String> brListStr = new ArrayList<String>();
-                
-                if(businessRole != null){
-                    for(int i = 0; i < businessRole.size(); i++){
-                        
-                        Map<String, String> bRole = businessRole.get(i);
-                        
-                        brListStr.add(bRole.get("businessRole"));
-                    }
-                    userProfileHW.setBusinessRoles(brListStr);
-                }
-            }
-
-        } catch (Exception e) {
-            //e.printStackTrace();
-            throw e;
-        }
-        
-        return userProfileHW;
     }
   
 }

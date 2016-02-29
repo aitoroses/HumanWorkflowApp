@@ -3,6 +3,7 @@ package com.bss.humanworkflow.client.rest;
 
 import com.bss.humanworkflow.client.config.AuthConfig;
 import com.bss.humanworkflow.client.rest.types.AuthenticateInput;
+import com.bss.humanworkflow.client.rest.types.UserProfile;
 import com.bss.security.JWTokens;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,21 +29,18 @@ import oracle.bpel.services.workflow.WorkflowException;
 import oracle.bpel.services.workflow.client.IWorkflowServiceClient;
 import oracle.bpel.services.workflow.client.IWorkflowServiceClientConstants;
 import oracle.bpel.services.workflow.client.WorkflowServiceClientFactory;
-
 import oracle.bpel.services.workflow.query.ITaskQueryService;
 import oracle.bpel.services.workflow.verification.IWorkflowContext;
 
 import oracle.bpm.client.BPMServiceClientFactory;
 import oracle.bpm.services.authentication.IBPMUserAuthenticationService;
 
-import oracle.bpm.services.organization.common.BPMContext;
-
 import weblogic.security.URLCallbackHandler;
 import weblogic.security.services.Authentication;
 
 
 @Path("/")
-public class TaskQueryService  {
+public class IdentityService  {
     
     private static IBPMUserAuthenticationService iuas = null;
     
@@ -97,12 +96,18 @@ public class TaskQueryService  {
                 System.out.println("Error getting locale on authentication: Fallback to user profile's one");
                 lang = ibpmCntx.getLocale().getLanguage().substring(0, 2);            
             }
+            
+            //Profile por the user
+            UserProfile userProfile = new UserProfile();
+            
+            userProfile.setUserDisplayName(ibpmCntx.getUserDisplayName());
                         
             HashMap claims = new HashMap<String, Object>();
           
             claims.put("workflowContext", ibpmCntx.getToken());
             claims.put("locale", lang);
             claims.put("AccessLevel", 1);
+            claims.put("profile", userProfile);
 
 
             String token = JWTokens.getToken(userId, claims);
@@ -126,6 +131,84 @@ public class TaskQueryService  {
             }
         }
         
+    }
+    
+    @POST
+    @Path("/authenticateOnBehalf")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response authenticateOnBehalf(AuthenticateInput input, @Context HttpServletResponse res, @Context HttpServletRequest req,
+                                        @Context ServletContext context, @QueryParam("onBehalf") String onBehalf) {
+    
+        try {
+        
+            if (onBehalf == null || onBehalf.equals("")) {
+                return authenticate(input, res, req, context);
+            }
+            
+            String userId = "";  
+            if(input.getLogin() != null  && !input.getLogin().equals(""))
+              userId = input.getLogin().toLowerCase();
+            else
+                return WorkflowError.respond(401, "Verify the userId.");
+            
+            
+            IBPMContext ibpmCntx  = null;
+            if(input.getPassword() != null && !input.getPassword().equals("")) {
+                ibpmCntx = getIBPMContext(input.getLogin(), input.getPassword());
+                
+                
+                ibpmCntx = getIBPMContextOnBehalf(ibpmCntx, onBehalf);
+            
+                // ADF Authentication
+                //adfAuthenticate(userId, input.getPassword(), req);
+            } 
+            else
+                return WorkflowError.respond(401, "Verify the password.");
+            
+            
+            String lang = "";
+            
+            try {
+            // Accept-Language:en,es;q=0.8,gl;q=0.6,de;q=0.4 or en-US,en;q=0.8,es;q=0.6
+            
+                lang = req.getHeader("Accept-Language");
+                
+                if(lang != null && !lang.equals("")){
+                    lang = lang.substring(0,2);
+                    //lang = req.getHeader("Accept-Language").split(";")[0].split(",")[0].substring(2);
+                } else
+                    lang = ibpmCntx.getLocale().getLanguage().substring(0, 2);
+            
+            } catch(Exception e) {
+                System.out.println("Error getting locale on authentication: Fallback to user profile's one");
+                lang = ibpmCntx.getLocale().getLanguage().substring(0, 2);            
+            }
+                        
+            HashMap claims = new HashMap<String, Object>();
+            
+            claims.put("workflowContext", ibpmCntx.getToken());
+            claims.put("locale", lang);
+            claims.put("AccessLevel", 1);
+
+            String token = JWTokens.getToken(onBehalf, claims);
+            
+            
+            // Setup the cookies
+            res.addCookie(Utils.createCookie("eappu", onBehalf));
+            res.addCookie(Utils.createCookie("eapplg", lang));
+            
+            return Response.ok().entity(ibpmCntx).header("Authorization", "Bearer " + token).build();
+        }  catch(Exception e) {
+            e.printStackTrace(); 
+            
+            if( e.getMessage()!= null &&  e.getMessage().contains(input.getLogin() + " denied")) {
+                return WorkflowError.respond(401, "Verify that the user credentials are correct.");
+            }
+            else {
+                return WorkflowError.respond(400, "Bad request.");        
+            }
+        }
     }
   
     private void adfAuthenticate(String _username, String _password , HttpServletRequest req) throws Exception {      
@@ -156,8 +239,16 @@ public class TaskQueryService  {
         retContext = iuas.authenticate(userId, password.toCharArray(), null);
         
         
-        
         return retContext;
+    }
+    
+    public IBPMContext getIBPMContextOnBehalf(IBPMContext ibpmContext, String userId) throws Exception {
+        
+        IBPMContext retContextOnBehalf = null;
+        
+        retContextOnBehalf   = iuas.authenticateOnBehalfOf(ibpmContext, userId);
+    
+        return retContextOnBehalf;
     }
     
     private  BPMServiceClientFactory getBPMServiceClientFactory(String userId, String password, String uri) throws Exception{
@@ -183,72 +274,4 @@ public class TaskQueryService  {
         return ctx;
     }
     
-/*
-    private UserProfileHW getUserProlile(String userId, String applicationId) throws Exception {
-        
-        InvokeContext ctx = new InvokeContext(userId, applicationId);
-
-        UMMClientProxy prox = new UMMClientProxy();
-        
-        UserProfileHW userProfileHW = null;
-        
-        try {
-            
-            UserProfile userP = prox.getUserProfile(ctx, userId);
-            
-            userProfileHW = new UserProfileHW();
-            
-            if(userP != null ){
-                //data user
-                if(userP.getUserData()!= null){ 
-                    userProfileHW.setUserId(userP.getUserData().getUid());
-                    userProfileHW.setDisplayName(userP.getUserData().getDisplayName());
-                    userProfileHW.setFirstName(userP.getUserData().getFirstName());
-                    userProfileHW.setLastName(userP.getUserData().getLastName());
-                    userProfileHW.setMail(userP.getUserData().getMail());
-                }
-                //ous
-                userProfileHW.setOus(userP.getOus());
-                
-                //properties
-                if(userP.getProperties() != null){
-                    
-                    List<PropertyHW> listPropHW = new ArrayList<PropertyHW>();
-                    PropertyHW propHW = null;
-                    
-                    
-                    for(Property prop : userP.getProperties()){                        
-                        propHW = new PropertyHW();
-                        propHW.setLabel(prop.getLabel());
-                        propHW.setValue(prop.getValue());
-                        
-                        listPropHW.add(propHW);
-                    }                    
-                    userProfileHW.setProperties(listPropHW);                    
-                }
-                
-                //business roles
-                List<Map<String, String>> businessRole = prox.getBusinessRolesForUser(ctx, userId);
-                
-                List<String> brListStr = new ArrayList<String>();
-                
-                if(businessRole != null){
-                    for(int i = 0; i < businessRole.size(); i++){
-                        
-                        Map<String, String> bRole = businessRole.get(i);
-                        
-                        brListStr.add(bRole.get("businessRole"));
-                    }
-                    userProfileHW.setBusinessRoles(brListStr);
-                }
-            }
-
-        } catch (Exception e) {
-            //e.printStackTrace();
-            throw e;
-        }
-        
-        return userProfileHW;
-    }
-  */
 }

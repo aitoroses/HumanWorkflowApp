@@ -2,18 +2,18 @@ package com.bss.humanworkflow.client.userprofile;
 
 import java.io.Serializable;
 
-public class PropertyHW  implements Serializable {
+public class UserProperty  implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     private String label;
     private String value;
 
-    public PropertyHW() {
+    public UserProperty() {
         super();
     }
     
-    public PropertyHW(String label, String value) {
+    public UserProperty(String label, String value) {
         super();
         this.label = label;
         this.value = value;
