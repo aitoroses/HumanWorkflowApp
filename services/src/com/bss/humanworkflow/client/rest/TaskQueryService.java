@@ -1,35 +1,21 @@
 package com.bss.humanworkflow.client.rest;
 
+
 import com.bss.humanworkflow.client.TaskQueryService.WorkflowErrorMessage;
 import com.bss.humanworkflow.client.impl.view.Criteria;
 import com.bss.humanworkflow.client.impl.view.CriteriaInput;
 import com.bss.humanworkflow.client.rest.security.NotAuthenticated;
 import com.bss.humanworkflow.client.rest.security.Utils;
 import com.bss.humanworkflow.client.rest.types.AuthenticateInput;
-
-import com.bss.humanworkflow.client.userprofile.UserProperty;
-import com.bss.humanworkflow.client.userprofile.ApplicationUserProfile;
 import com.bss.security.JWTokens;
 
-import com.novartis.bpm.um.UMMClientProxy;
-
-import com.novartis.bpm.um.client.InvokeContext;
-
-import com.novartis.bpm.um.client.UMMClient;
-import com.novartis.bpm.um.model.Property;
-import com.novartis.bpm.um.model.UserProfile;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import java.util.Map;
 
 import javax.security.auth.Subject;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-
 import javax.servlet.http.HttpServletResponse;
 
 import javax.ws.rs.Consumes;
@@ -41,15 +27,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
 import javax.ws.rs.core.Response;
-
 
 import oracle.bpel.services.workflow.common.model.WorkflowContextType;
 import oracle.bpel.services.workflow.task.model.Task;
 
 import weblogic.security.URLCallbackHandler;
 import weblogic.security.services.Authentication;
+
 
 @Path("/TaskQueryService")
 public class TaskQueryService extends AbstractService {
@@ -100,14 +85,7 @@ public class TaskQueryService extends AbstractService {
             claims.put("locale", lang);
             claims.put("AccessLevel", 1);
             
-
-            /*
-            if (ummContext != null && !ummContext.equals("")) {
-                claims.put("BusinessRole", getUserProlile(userId, ummContext));
-            }
-            */
             String token = JWTokens.getToken(userId, claims);
-            
           
             // ADF Authentication
             adfAuthenticate(userId, input.getPassword(), req);
@@ -138,58 +116,6 @@ public class TaskQueryService extends AbstractService {
             return WorkflowError.respond(400, "Bad request.");
         }
         
-    }
-
-    @POST
-    @Path("/authenticateOnBehalf")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @NotAuthenticated
-    public Response authenticateOnBehalf(AuthenticateInput input, @Context HttpServletResponse res, @Context HttpServletRequest req,
-                                        @Context ServletContext context, @QueryParam("onBehalf") String onBehalf, @QueryParam("ummContext") String ummContext ) {
-    
-        try {
-        
-            if (onBehalf == null || onBehalf.equals("")) {
-                return authenticate(input, res, req, context, ummContext);
-            }
-            
-            String userId = "";  
-            if(input.getLogin() != null  && !input.getLogin().equals(""))
-              userId = input.getLogin().toLowerCase();
-            
-            WorkflowContextType wf = getWorkflow().authenticate(userId, input.getPassword(), onBehalf);
-            
-            String lang = wf.getLocale().split("#")[0].split("_")[0];
-            
-            HashMap claims = new HashMap<String, Object>();
-            
-            claims.put("workflowContext", wf.getToken());
-            claims.put("locale", lang);
-            claims.put("onBehalf", onBehalf);
-            claims.put("AccessLevel", 1);
-            
-
-            String token = JWTokens.getToken(userId, claims);
-            
-            // ADF Authentication
-            adfAuthenticate(userId, input.getPassword(), req);
-            
-            /*** UMM ensure user existance (optional, only if appId specified)***/
-            //if (ummContext != null && !ummContext.equals("")) {
-                //ensureUMMUser(userId, ummContext);
-            //}
-            
-            // Setup the cookies
-            res.addCookie(Utils.createCookie("eappu", userId));
-            res.addCookie(Utils.createCookie("eapplg", lang));
-            
-        
-            return Response.ok().entity(wf).header("Authorization", "Bearer " + token).build();
-        } catch(Exception e) {
-            e.printStackTrace();
-            return WorkflowError.respond(400, "Bad request.");
-        }
     }
   
     @GET

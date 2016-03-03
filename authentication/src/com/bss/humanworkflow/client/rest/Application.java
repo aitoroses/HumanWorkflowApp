@@ -21,5 +21,10 @@ public class Application extends ResourceConfig {
       packages("com.bss.humanworkflow.client.rest")
         .register(CustomObjectMapperProvider.class)
         .register(JacksonFeature.class);
+      
+      
+        // Configure JWTokens to have an expiration time of 15
+        JWTokens.EXPIRATION_MINUTES = 15;
     }
+    
 }

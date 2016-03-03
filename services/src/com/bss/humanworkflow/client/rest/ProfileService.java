@@ -2,7 +2,6 @@ package com.bss.humanworkflow.client.rest;
 
 
 import com.bss.humanworkflow.client.userprofile.ApplicationUserProfile;
-import com.bss.humanworkflow.client.userprofile.UserProperty;
 import com.bss.security.JWTokens;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -14,14 +13,12 @@ import com.nimbusds.jwt.ReadOnlyJWTClaimsSet;
 
 import com.novartis.bpm.um.UMMClientProxy;
 import com.novartis.bpm.um.client.InvokeContext;
-import com.novartis.bpm.um.model.Property;
 
 import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -126,13 +123,13 @@ public class ProfileService  {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/assing_ou/{appId}")
+    @Path("/assign-ou/{appId}")
     public Response addUserToOus(@PathParam("appId") String appId, @QueryParam("ous") List<String> ous, @Context HttpServletRequest request) {
         
         String token = getToken(request);       
         
         if(token == null){
-            return WorkflowError.respond(404, "Token not present.");
+            return WorkflowError.respond(401, "Token not present.");
         }
         
         String userId = (String) request.getAttribute("user");
@@ -141,81 +138,87 @@ public class ProfileService  {
             
             InvokeContext ctx = new InvokeContext(userId, appId);
 
-            UMMClientProxy ummProx = new UMMClientProxy();
-            
-            if(ous!= null && ous.size()>0){
+            Boolean userInUMM = createUserInUMM(ctx);
                 
-                try {
-                    for(String ouName : ous){
-                        ummProx.addUserToOuUM(ctx,userId, ouName);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return WorkflowError.respond(500, "Error invoking UMM");
-                }
+            if(userInUMM) {                
                 
-                ReadOnlyJWTClaimsSet jw = JWTokens.parseToken(token);
+                UMMClientProxy ummProx = new UMMClientProxy();
                 
-                // Apps
-                JSONObject appJsonMaps = (JSONObject) jw.getClaim("apps");
-                
-                ObjectMapper mapper = new ObjectMapper();
-                
-                HashMap<String,ApplicationUserProfile> appUserProfile = null;
-                
-                TypeReference<HashMap<String,ApplicationUserProfile>> typeRef = new TypeReference<HashMap<String,ApplicationUserProfile>>() {};
-
-                
-                try {
+                if(ous!= null && ous.size()>0){
                     
-                    if(appJsonMaps != null){
-                    
-                        try {
-                            appUserProfile = (HashMap<String,ApplicationUserProfile>) mapper.readValue(appJsonMaps.toJSONString(), typeRef);
-                            
-                        } catch (JsonMappingException e) {
-                            return WorkflowError.respond(400, "Error extracting application profile from token");
-                        } catch (JsonParseException e) {
-                            return WorkflowError.respond(400, "Error extracting application profile from token");
-                        } catch (IOException e) {
-                            return WorkflowError.respond(400, "Error extracting application profile from token");
-                        }                                            
-                        
-                        if(appUserProfile != null && appUserProfile.get(appId) != null){
-                            
-                            List<String> previousOUs = appUserProfile.get(appId).getOus();
-                            
-                            if(previousOUs != null){
-                               previousOUs.addAll(ous);
-                            } else {
-                                previousOUs = new ArrayList<String>();
-                                previousOUs = ous;                            
-                            }
-                            
-                            appUserProfile.get(appId).setOus(previousOUs);
+                    try {
+                        for(String ouName : ous){
+                            ummProx.addUserToOuUM(ctx,userId, ouName);
                         }
-                    }
-                    else {
-                        appUserProfile = new HashMap<String, ApplicationUserProfile>();
-                        
-                        ApplicationUserProfile appProfile = new ApplicationUserProfile();
-                        
-                        appProfile.setOus(ous);
-                
-                        appUserProfile.put(appId, appProfile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return WorkflowError.respond(400, "Error invoking UMM");
                     }
                     
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return WorkflowError.respond(500, "Error adding OUs to application profile");
-                }
-
-                token  = udpateToken(jw, request, appUserProfile);
-                
-                request.setAttribute("AuthorizationToken", token);
-                
+                    ReadOnlyJWTClaimsSet jw = JWTokens.parseToken(token);
+                    
+                    // Apps
+                    JSONObject appJsonMaps = (JSONObject) jw.getClaim("apps");
+                    
+                    ObjectMapper mapper = new ObjectMapper();
+                    
+                    HashMap<String,ApplicationUserProfile> appUserProfile = null;
+                    
+                    TypeReference<HashMap<String,ApplicationUserProfile>> typeRef = new TypeReference<HashMap<String,ApplicationUserProfile>>() {};
+    
+                    
+                    try {
+                        
+                        if(appJsonMaps != null){
+                        
+                            try {
+                                appUserProfile = (HashMap<String,ApplicationUserProfile>) mapper.readValue(appJsonMaps.toJSONString(), typeRef);
+                                
+                            } catch (JsonMappingException e) {
+                                return WorkflowError.respond(400, "Error extracting application profile from token");
+                            } catch (JsonParseException e) {
+                                return WorkflowError.respond(400, "Error extracting application profile from token");
+                            } catch (IOException e) {
+                                return WorkflowError.respond(400, "Error extracting application profile from token");
+                            }                                            
+                            
+                            if(appUserProfile != null && appUserProfile.get(appId) != null){
+                                
+                                List<String> previousOUs = appUserProfile.get(appId).getOu();
+                                
+                                if(previousOUs != null){
+                                   previousOUs.addAll(ous);
+                                } else {
+                                    previousOUs = new ArrayList<String>();
+                                    previousOUs = ous;                            
+                                }
+                                
+                                appUserProfile.get(appId).setOu(previousOUs);
+                            }
+                        }
+                        else {
+                            appUserProfile = new HashMap<String, ApplicationUserProfile>();
+                            
+                            ApplicationUserProfile appProfile = new ApplicationUserProfile();
+                            
+                            appProfile.setOu(ous);
+                    
+                            appUserProfile.put(appId, appProfile);
+                        }
+                        
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return WorkflowError.respond(400, "Error adding OUs to application profile");
+                    }
+    
+                    token  = udpateToken(jw, request, appUserProfile);
+                    
+                    request.setAttribute("AuthorizationToken", token);
+                    
+                } else
+                    return WorkflowError.respond(400, "OU list empty");
             } else
-                return WorkflowError.respond(500, "OU list empty");            
+                return WorkflowError.respond(400, "The system cannot create the user");
         }
         else
             return WorkflowError.respond(400, "User id doesn't found");
@@ -236,11 +239,11 @@ public class ProfileService  {
             //Setting OU List
             List<String> ous = ummProx.getUserOU(ctx, userId);
             
-            appUserProfile.setOus(ous);
+            appUserProfile.setOu(ous);
             
             
-            //Setting user properties
-            List<Property> properyUMM = ummProx.getPropertiesForUser(ctx, userId);
+            /******Setting user properties*******/
+            /*List<Property> properyUMM = ummProx.getPropertiesForUser(ctx, userId);
             
             
             if(properyUMM != null){
@@ -258,8 +261,10 @@ public class ProfileService  {
                 }                    
                 appUserProfile.setProperties(listPropHW);                    
             }
+            */
             
-            //business roles
+            /*****************business roles************************/
+            /*
             List<Map<String, String>> businessRole = ummProx.getBusinessRolesForUser(ctx, userId);
             
             List<String> brListStr = new ArrayList<String>();
@@ -273,6 +278,7 @@ public class ProfileService  {
                 }
                 appUserProfile.setBusinessRoles(brListStr);
             }
+            */
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -283,11 +289,10 @@ public class ProfileService  {
     }
     
     
-    
     /*
     private boolean ensureUMMUser(String userId, String applicationId) throws Exception {
         InvokeContext ctx = new InvokeContext(userId, applicationId);
-        
+
         UMMClientProxy prox = new UMMClientProxy();
         try {
             return prox.ummCheckUser(ctx, userId);
@@ -297,5 +302,24 @@ public class ProfileService  {
         }
     }
     */
-    
+
+    private Boolean createUserInUMM(InvokeContext ctx) {
+        
+        Boolean userInUMM = false;
+        
+        UMMClientProxy ummProx = new UMMClientProxy();
+        
+        //Check if the user exists in UMM
+        userInUMM = ummProx.isUserInUmm(ctx, ctx.getRequester());
+        
+        if(!userInUMM){
+            //if not, creation of the user
+            List<String> userList = new ArrayList<String>();
+            userList.add(ctx.getRequester());
+            
+            userInUMM = ummProx.createUsers(ctx,userList);
+        }
+        
+        return userInUMM;
+    }
 }

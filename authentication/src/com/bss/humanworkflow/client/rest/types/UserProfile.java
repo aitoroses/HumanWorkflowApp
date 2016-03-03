@@ -9,13 +9,13 @@ public class UserProfile implements Serializable  {
         super();
     }
     
-    private String userDisplayName;
+    private String displayName;
 
-    public void setUserDisplayName(String userDisplayName) {
-        this.userDisplayName = userDisplayName;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public String getUserDisplayName() {
-        return userDisplayName;
+    public String getDisplayName() {
+        return displayName;
     }
 }

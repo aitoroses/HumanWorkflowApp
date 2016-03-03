@@ -8,7 +8,7 @@ public class ApplicationUserProfile  implements Serializable  {
 
     private static final long serialVersionUID = 1L;
     
-    private List<String> ous;
+    private List<String> ou;
     
     private List<String> businessRoles;
     
@@ -18,21 +18,21 @@ public class ApplicationUserProfile  implements Serializable  {
         super();
     }    
     
-    public ApplicationUserProfile(List<String> ous, List<String> businessRole, List<UserProperty> properties) {
+    public ApplicationUserProfile(List<String> ou, List<String> businessRole, List<UserProperty> properties) {
         super();
 
-        this.ous = ous;
+        this.ou = ou;
         this.businessRoles = businessRole;
         this.properties = properties;
     }
 
 
-    public void setOus(List<String> ous) {
-        this.ous = ous;
+    public void setOu(List<String> ou) {
+        this.ou = ou;
     }
 
-    public List<String> getOus() {
-        return ous;
+    public List<String> getOu() {
+        return ou;
     }
 
     public void setBusinessRoles(List<String> businessRoles) {
