@@ -6,7 +6,10 @@ import com.bss.humanworkflow.client.rest.types.AuthenticateInput;
 import com.bss.humanworkflow.client.rest.types.UserProfile;
 import com.bss.security.JWTokens;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.Subject;
@@ -31,7 +34,9 @@ import oracle.bpel.services.workflow.WorkflowException;
 import oracle.bpel.services.workflow.client.IWorkflowServiceClient;
 import oracle.bpel.services.workflow.client.IWorkflowServiceClientConstants;
 import oracle.bpel.services.workflow.client.WorkflowServiceClientFactory;
+import oracle.bpel.services.workflow.common.model.WorkflowContextType;
 import oracle.bpel.services.workflow.query.ITaskQueryService;
+import oracle.bpel.services.workflow.task.model.Task;
 import oracle.bpel.services.workflow.verification.IWorkflowContext;
 
 import oracle.bpm.client.BPMServiceClientFactory;
@@ -420,5 +425,77 @@ public class IdentityService  {
             
         return displayName;
     }
+    /*
+    public static Task getTask() {
+        Task task = null;
+
+        try {
+            // Instantiate the client
+            IWFClient wf = new WFClientImpl();
+
+            // Authenticate the user
+            WorkflowContextType wfcx = wf.authenticate("buhead15", "welcome1");
+
+            // Query Creator tasks
+            List<Task> tasks =
+                wf.queryTasks(wfcx.getToken(), Criteria.getCreatorTasksCriteria("buhead15"),
+                              0, 0);
+
+            tasks =
+                    wf.queryTasks(wfcx.getToken(), Criteria.getMyAssignedTasks(),
+                                  0, 0);
+
+            // Return a Task
+            task =wf.getTaskDetailsById(wfcx.getToken(), "857d16f9-5c94-44e9-b161-1e12b2e19a46");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return task;
+        }
+        
+            public static void test1() {
+
+        try {
+
+            Task task = getTask();
+
+            // Convert to JSON
+            ObjectMapper mapper = new ObjectMapper();
+            String asString = mapper.writeValueAsString(task);
+
+            System.out.println(asString);
+
+            // Read JSON
+            Task task1 = mapper.readValue(asString, Task.class);
+
+            System.out.println(task1.getCreator());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+        
+            public static void main(String[] main) {
+
+        try {
+
+            System.out.println(TaskMock.value);
+
+            // Read JSON
+            ObjectMapper mapper = new ObjectMapper();
+            Task task1 = mapper.readValue(TaskMock.value, Task.class);
+
+            System.out.println(task1.getCreator());
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println();
+    }
+*/
     
 }
